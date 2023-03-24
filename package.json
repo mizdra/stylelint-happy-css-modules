@@ -1,0 +1,21 @@
+{
+  "name": "stylelint-happy-css-modules",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "prettier --check ."
+  },
+  "keywords": [],
+  "author": "mizdra <pp.mizdra@gmail.com>",
+  "license": "MIT",
+  "prettier": "@mizdra/prettier-config-mizdra",
+  "devDependencies": {
+    "@mizdra/prettier-config-mizdra": "^1.0.0",
+    "@tsconfig/node18-strictest-esm": "^1.0.1",
+    "prettier": "^2.8.7"
+  },
+  "peerDependencies": {
+    "stylelint": "^15.3.0"
+  }
+}
