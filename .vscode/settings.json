@@ -4,5 +4,9 @@
   "editor.formatOnSave": true, // for prettier
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true // for eslint
+  },
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.mjs"
   }
 }
