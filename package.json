@@ -19,7 +19,7 @@
     "@eslint/js": "^8.36.0",
     "@mizdra/eslint-config-mizdra": "^1.2.0",
     "@mizdra/prettier-config-mizdra": "^1.0.0",
-    "@tsconfig/node18-strictest-esm": "^1.0.1",
+    "@tsconfig/node16": "^1.0.3",
     "@types/node": "^18.15.7",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",

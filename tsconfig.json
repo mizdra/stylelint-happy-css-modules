@@ -1,8 +1,30 @@
 {
-  "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
   "exclude": ["eslint.config.mjs", "example"],
   "compilerOptions": {
-    "declaration": true,
-    "isolatedModules": true
+    // copied from node_modules/@tsconfig/strictest/tsconfig.json
+    // ref: https://github.com/tsconfig/bases/pull/161
+    "strict": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // "importsNotUsedAsValues": "error",
+    // "verbatimModuleSyntax": true,
+    "checkJs": true,
+
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // my config
+    "declaration": true
   }
 }
