@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "run-s -c lint:*",
     "lint:prettier": "prettier --check .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs .",
     "lint:tsc": "tsc --noEmit"
   },
   "keywords": [],
