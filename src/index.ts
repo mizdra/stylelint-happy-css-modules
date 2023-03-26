@@ -1,5 +1,5 @@
 import { createPlugin } from 'stylelint';
-import { rules } from './rules/index.js';
+import { rules } from './rules';
 
 export const NAMESPACE = 'happy-css-modules';
 

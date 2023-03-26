@@ -1,6 +1,6 @@
 import stylelint, { utils } from 'stylelint';
-import { NAMESPACE } from '../index.js';
-import { isBoolean } from '../util/validateTypes.js';
+import { NAMESPACE } from '..';
+import { isBoolean } from '../util/validateTypes';
 
 const ruleName = `${NAMESPACE}/no-unused-selectors`;
 
