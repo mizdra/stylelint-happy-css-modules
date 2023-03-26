@@ -2,9 +2,11 @@
   "name": "stylelint-happy-css-modules",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "commonjs",
   "scripts": {
+    "build": "tsc",
     "lint": "run-s -c lint:*",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs .",

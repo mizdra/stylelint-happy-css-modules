@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": ["eslint.config.mjs", "example"],
+  "exclude": ["eslint.config.mjs", "example", "dist"],
   "compilerOptions": {
     // copied from node_modules/@tsconfig/strictest/tsconfig.json
     // ref: https://github.com/tsconfig/bases/pull/161
@@ -25,6 +25,7 @@
     "forceConsistentCasingInFileNames": true,
 
     // my config
+    "outDir": "dist",
     "declaration": true
   }
 }
