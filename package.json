@@ -36,5 +36,8 @@
   },
   "peerDependencies": {
     "stylelint": "^15.3.0"
+  },
+  "dependencies": {
+    "source-map": "^0.7.4"
   }
 }
