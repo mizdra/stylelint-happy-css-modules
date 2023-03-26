@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
-  "exclude": ["eslint.config.js", "example"],
+  "exclude": ["eslint.config.mjs", "example"],
   "compilerOptions": {
     "declaration": true,
     "isolatedModules": true
