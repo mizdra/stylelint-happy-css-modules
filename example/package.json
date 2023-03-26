@@ -5,11 +5,13 @@
   "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "gen": "hcm '*-*/*.{css,scss,less}'"
+    "gen": "hcm '*-*/*.{css,scss,less}'",
+    "lint": "stylelint '*-*/*.{css,scss,less}'"
   },
   "author": "mizdra",
   "license": "MIT",
   "devDependencies": {
-    "happy-css-modules": "^2.1.0"
+    "happy-css-modules": "^2.1.0",
+    "stylelint-happy-css-modules": "file:.."
   }
 }
