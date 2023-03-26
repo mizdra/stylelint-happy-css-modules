@@ -1,7 +1,6 @@
 import { createPlugin } from 'stylelint';
+import { NAMESPACE } from './constant';
 import { rules } from './rules';
-
-export const NAMESPACE = 'happy-css-modules';
 
 const rulesPlugins = Object.entries(rules).map(([ruleName, rule]) => {
   return createPlugin(`${NAMESPACE}/${ruleName}`, rule);
