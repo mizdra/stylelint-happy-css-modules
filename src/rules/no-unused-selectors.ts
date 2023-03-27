@@ -77,6 +77,11 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
         column: classSelectorStartPosition.column + classSelector.value.length,
       };
 
+      // TODO: If you use `--localsConvention camelCase` or `--localsConvention dashes`,
+      // the type definitions of up to two forms of properties will be written to .d.ts.
+      // ref: https://github.com/mizdra/happy-css-modules/blob/b7822b5924bd0fa0c0a1457af16fa40bd6ceb1ec/src/emitter/dts.test.ts#L156-L157
+      // ref: https://github.com/mizdra/happy-css-modules/blob/b7822b5924bd0fa0c0a1457af16fa40bd6ceb1ec/src/emitter/dts.test.ts#L202-L203
+      // Therefore, we need to use `smc.allGeneratedPositionsFor` to get the positions of all form properties.
       const generatedPosition = smc.generatedPositionFor({
         source: pathToFileURL(cssFilePath).href,
         line: classSelectorStartPosition.line, // mozilla/source-map is 1-based
@@ -88,8 +93,13 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
       for (const generatedPosition of generatedPositions) {
         const sourceFile = project.getSourceFile(dtsFilePath);
         if (sourceFile === undefined) throw new Error(`Cannot find ${dtsFilePath}'s source file. ${process.cwd()}`);
+        // TODO: The combination of postcss and happy-css-modules breaks sourcemap with a selector list containing newlines.
+        // In such cases `generatedPosition.line` and `generatedPosition.column` may become null. These cases must also be handled.
         if (generatedPosition.line === null || generatedPosition.column === null)
           throw new Error('Invalid generated position.');
+
+        // TODO: Support Dependent Type Definition File
+        // ref: https://github.com/mizdra/happy-css-modules/pull/121
         const pos = sourceFile.compilerNode.getPositionOfLineAndCharacter(
           generatedPosition.line - 1, // TypeScript Compiler API is 0-based
           generatedPosition.column, // TypeScript Compiler API is 0-based
@@ -109,6 +119,8 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
             }\`. Expected \`PropertySignature\`.`,
           );
         const refs = propertySignatureNode.findReferencesAsNodes();
+        // TODO: Support `.{css,scss,less}.d.ts`
+        // TODO: Support `.d.{css,scss,less}.ts`
         const refsWithoutDts = refs.filter((ref) => !ref.getSourceFile().getFilePath().endsWith('.css.d.ts'));
         if (refsWithoutDts.length > 0) {
           isReferenced = true;
