@@ -1,5 +1,7 @@
 import { readFile } from 'fs/promises';
 import { pathToFileURL } from 'url';
+import type { Root, Rule } from 'postcss';
+import selectorParser, { type ClassName } from 'postcss-selector-parser';
 import { SourceMapConsumer } from 'source-map';
 import type stylelint from 'stylelint';
 import { utils } from 'stylelint';
@@ -13,6 +15,25 @@ const ruleName = `${NAMESPACE}/no-unused-selectors`;
 const messages = utils.ruleMessages(ruleName, {
   unused: (selector: string) => `\`${selector}\` is defined but not used.`,
 });
+
+function walkClassSelectors(root: Root, callback: (rule: Rule, classSelector: ClassName) => void): void {
+  root.walkRules((rule) => {
+    // In `rule.selector` comes the following string:
+    // 1. ".foo"
+    // 2. ".foo:hover"
+    // 3. ".foo, .bar"
+    selectorParser((selectors) => {
+      selectors.walk((selector) => {
+        if (selector.type === 'class') {
+          // In `selector.value` comes the following string:
+          // 1. "foo"
+          // 2. "bar"
+          callback(rule, selector);
+        }
+      });
+    }).processSync(rule);
+  });
+}
 
 export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, secondaryOptions, _context) => {
   return async (root, result) => {
@@ -37,14 +58,29 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
     const sourceMapContent = await readFile(sourceMapFilePath, 'utf-8');
     const smc = await new SourceMapConsumer(sourceMapContent, pathToFileURL(sourceMapFilePath).href);
 
-    root.walkRules((rule) => {
+    walkClassSelectors(root, (rule, classSelector) => {
       // postcss's line and column are 1-based
-      const { line, column } = rule.source?.start ?? {};
-      if (line === undefined || column === undefined) return;
+      if (rule?.source?.start?.line === undefined || rule.source.start.column === undefined)
+        throw new Error(`Invalid rule's source position: ${JSON.stringify(rule)}`);
+      if (classSelector?.source?.start?.line === undefined || classSelector.source.start.column === undefined)
+        throw new Error(`Invalid class selector's source position: ${JSON.stringify(classSelector)}`);
+
+      const classSelectorStartPosition = {
+        // The line is 1-based.
+        line: rule.source.start.line + (classSelector.source.start.line - 1),
+        // The column is 1-based.
+        column: rule.source.start.column + (classSelector.source.start.column - 1),
+      };
+      const classSelectorEndPosition = {
+        line: classSelectorStartPosition.line,
+        // The column is inclusive.
+        column: classSelectorStartPosition.column + classSelector.value.length,
+      };
+
       const generatedPosition = smc.generatedPositionFor({
         source: pathToFileURL(cssFilePath).href,
-        line, // mozilla/source-map is 1-based
-        column: column - 1, // mozilla/source-map is 0-based
+        line: classSelectorStartPosition.line, // mozilla/source-map is 1-based
+        column: classSelectorStartPosition.column - 1, // mozilla/source-map is 0-based
       });
       const generatedPositions = [generatedPosition];
 
@@ -85,6 +121,8 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
           result,
           ruleName,
           node: rule,
+          start: classSelectorStartPosition,
+          end: classSelectorEndPosition,
           message: messages.unused(rule.toString()),
         });
       }
