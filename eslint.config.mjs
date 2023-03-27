@@ -44,10 +44,14 @@ export default [
         project: ['tsconfig.json', 'example/tsconfig.json'],
       },
     },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': [2, { disallowTypeAnnotations: false }],
+    },
   },
   {
     rules: {
       'import/no-unresolved': 'off',
+      'import/no-extraneous-dependencies': ['error', { includeTypes: true }],
     },
   },
 ];

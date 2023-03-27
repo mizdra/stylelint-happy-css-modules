@@ -1,6 +1,0 @@
-{
-  "plugins": ["stylelint-happy-css-modules"],
-  "rules": {
-    "happy-css-modules/no-unused-selectors": true
-  }
-}
