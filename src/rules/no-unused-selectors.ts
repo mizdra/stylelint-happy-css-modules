@@ -119,10 +119,7 @@ export const noUnusedSelectors: stylelint.Rule<boolean> = (primaryOption, second
             }\`. Expected \`PropertySignature\`.`,
           );
         const refs = propertySignatureNode.findReferencesAsNodes();
-        // TODO: Support `.{css,scss,less}.d.ts`
-        // TODO: Support `.d.{css,scss,less}.ts`
-        const refsWithoutDts = refs.filter((ref) => !ref.getSourceFile().getFilePath().endsWith('.css.d.ts'));
-        if (refsWithoutDts.length > 0) {
+        if (refs.length > 0) {
           isReferenced = true;
           break;
         }
